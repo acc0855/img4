@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Carousel</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .carousel-container {
+      width: 100%;
+      overflow: hidden;
+      touch-action: pan-y; /* Allow vertical scrolling */
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+      min-width: 100%;
+      box-sizing: border-box;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+<div class="carousel-container">
+  <div class="carousel">
+    <div class="slide">
+      <img src="IMG_2824.jpg" alt="Slide 1">
+    </div>
+    <div class="slide">
+      <img src="IMG_2825.jpg" alt="Slide 2">
+    </div>
+    <div class="slide">
+      <img src="IMG_2826.jpg" alt="Slide 3">
+    </div>
+    <div class="slide">
+      <img src="IMG_2824.jpg" alt="Slide 4">
+    </div>
+  </div>
+</div>
+
+<script>
+  const carousel = document.querySelector('.carousel');
+  const carouselContainer = document.querySelector('.carousel-container');
+  let currentIndex = 0;
+  let startX = 0;
+
+  function showSlide(index) {
+    const transformValue = -index * 100 + '%';
+    carousel.style.transform = 'translateX(' + transformValue + ')';
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % 4;
+    showSlide(currentIndex);
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + 4) % 4;
+    showSlide(currentIndex);
+  }
+
+  // Comment out the setInterval line to disable automatic sliding
+  // setInterval(nextSlide, 3000); // Change slide every 3 seconds
+
+  // Event listeners for manual navigation
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'ArrowRight') {
+      nextSlide();
+    } else if (event.key === 'ArrowLeft') {
+      prevSlide();
+    }
+  });
+
+  // Touch event listeners for manual navigation on mobile devices
+  carouselContainer.addEventListener('touchstart', function(event) {
+    startX = event.touches[0].clientX;
+  });
+
+  carouselContainer.addEventListener('touchmove', function(event) {
+    const moveX = event.touches[0].clientX;
+    const deltaX = startX - moveX;
+
+    if (deltaX > 50) {
+      nextSlide();
+    } else if (deltaX < -50) {
+      prevSlide();
+    }
+  });
+</script>
+
+</body>
+</html>
